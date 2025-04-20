@@ -11,11 +11,11 @@ export const Button = ({
   size?: "small" | "medium" | "large";
 }) => {
   const baseStyles =
-    "rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2";
+    "rounded-lg font-semibold focus:outline-none focus:ring-1 focus:ring-offset-1 cursor-pointer transition duration-100 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed";
   const variantStyles = {
     primary: "bg-blue-500 text-white hover:bg-blue-600",
     secondary: "bg-gray-500 text-white hover:bg-gray-600",
-    tertiary: "bg-transparent text-white hover:bg-blue-900",
+    tertiary: "bg-transparent text-white hover:bg-blue-100/10",
   };
   const sizeStyles = {
     small: "px-4 py-1 text-sm",
