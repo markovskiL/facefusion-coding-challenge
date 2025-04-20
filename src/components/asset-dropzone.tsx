@@ -27,7 +27,7 @@ export const AssetDropzone = ({
   return (
     <div
       className={cn(
-        "py-10 px-6 bg-gray-950 w-fit dashed-border rounded-xl",
+        "h-30 w-22 flex items-center justify-center bg-gray-950 dashed-border rounded-xl",
         isDragActive && "bg-blue-500/20",
         isDragReject && "bg-red-500/20"
       )}

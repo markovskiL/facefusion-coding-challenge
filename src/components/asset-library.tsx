@@ -5,13 +5,15 @@ import { AssetDroppable } from "./asset-droppable";
 import { AssetDropzone } from "./asset-dropzone";
 import { useState } from "react";
 import { Asset } from "../types/asset";
+import { AssetPreviewCard } from "./asset-preview-card";
 
 const MAX_FILE_SIZE = 3 * 1024 * 1024;
 
 export const AssetLibrary = () => {
   const [error, setError] = useState<string | null>(null);
 
-  // Handle file drop for source area with size validation
+  const [assets, setAssets] = useState<Asset[]>([]);
+
   const onSourceDrop = (acceptedFiles: File[]) => {
     setError(null);
 
@@ -37,8 +39,7 @@ export const AssetLibrary = () => {
           createdAt: new Date().toISOString(),
         };
 
-        console.log("New asset:", newAsset);
-        /// handle new asset
+        setAssets((prevAssets) => [...prevAssets, newAsset]);
       };
 
       reader.readAsDataURL(file);
@@ -69,7 +70,12 @@ export const AssetLibrary = () => {
                 <option value="videos">Videos</option>
               </select>
             </div>
-            <AssetDropzone onSourceDrop={onSourceDrop} />
+            <div className="flex flex-wrap gap-4">
+              <AssetDropzone onSourceDrop={onSourceDrop} />
+              {assets.map((asset) => (
+                <AssetPreviewCard asset={asset} />
+              ))}
+            </div>
           </AssetDroppable>
         </div>
       </div>
