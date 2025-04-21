@@ -7,7 +7,7 @@ function App() {
       <div className="h-screen w-screen bg-gray-800 flex items-center justify-center">
         <AssetLibrary />
       </div>
-      <Toaster />
+      <Toaster richColors />
     </>
   );
 }
