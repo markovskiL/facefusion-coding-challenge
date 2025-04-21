@@ -21,7 +21,7 @@ export const AssetDroppable = ({
       ref={setNodeRef}
       className={cn(
         className,
-        "rounded-md transition-all duration-200 border-dashed",
+        "rounded-xl transition-all duration-200 border-dashed",
         isOver && "bg-blue-900/20 border-blue-500/50 border-2 scale-[1.01]"
       )}
     >

@@ -1,15 +1,28 @@
-import { DndContext } from "@dnd-kit/core";
+import {
+  DndContext,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
 import ImageIcon from "@material-symbols/svg-400/outlined/image.svg?react";
 import { Button } from "./ui/button";
 import { AssetDroppable } from "./asset-droppable";
 import { AssetDropzone } from "./asset-dropzone";
 import { useState } from "react";
 import { Asset } from "../types/asset";
-import { AssetPreviewCard } from "./asset-preview-card";
+import { AssetCardDraggable } from "./asset-card-draggable";
 
 const MAX_FILE_SIZE = 3 * 1024 * 1024;
 
 export const AssetLibrary = () => {
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    })
+  );
+
   const [error, setError] = useState<string | null>(null);
 
   const [assets, setAssets] = useState<Asset[]>([]);
@@ -40,14 +53,18 @@ export const AssetLibrary = () => {
         };
 
         setAssets((prevAssets) => [...prevAssets, newAsset]);
+        console.log(assets);
       };
 
       reader.readAsDataURL(file);
     });
   };
 
+  const handleDelete = (id: string) => {
+    setAssets((prevAssets) => prevAssets.filter((asset) => asset.id !== id));
+  };
   return (
-    <DndContext>
+    <DndContext sensors={sensors}>
       <div className="w-xl flex flex-col gap-6">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
@@ -60,9 +77,9 @@ export const AssetLibrary = () => {
           </div>
         </div>
 
-        <div className="p-4 bg-gray-900 rounded-lg">
-          <AssetDroppable id="asset-source">
-            <div className="text-white flex items-center justify-between">
+        <div className="p-4 bg-gray-900 rounded-3xl">
+          <AssetDroppable id="asset-source" className="p-4">
+            <div className="text-white flex items-center justify-between mb-5">
               <h2 className="text-2xl mb-4">Source</h2>
               <select name="filter" id="">
                 <option value="all">All</option>
@@ -73,7 +90,12 @@ export const AssetLibrary = () => {
             <div className="flex flex-wrap gap-4">
               <AssetDropzone onSourceDrop={onSourceDrop} />
               {assets.map((asset) => (
-                <AssetPreviewCard asset={asset} />
+                <AssetCardDraggable
+                  asset={asset}
+                  id={asset.id}
+                  onDelete={handleDelete}
+                  key={asset.id}
+                />
               ))}
             </div>
           </AssetDroppable>
