@@ -18,6 +18,7 @@ interface Props<FilterValue extends string> {
   onDrop: (files: File[]) => void;
   filters: FilterOption<FilterValue>[];
   getFilteredAssets: (filterType: FilterValue, assets: Asset[]) => Asset[];
+  maxFileSize: number;
 }
 
 export const AssetSection = <FilterValue extends string>({
@@ -29,6 +30,7 @@ export const AssetSection = <FilterValue extends string>({
   onDrop,
   filters,
   getFilteredAssets,
+  maxFileSize,
 }: Props<FilterValue>) => {
   const [filterType, setFilterType] = useState<FilterValue>(
     filters[0]?.value || ("" as FilterValue)
@@ -61,7 +63,9 @@ export const AssetSection = <FilterValue extends string>({
           </select>
         </div>
         <div className="flex flex-wrap gap-4">
-          {hasDropzone && <AssetDropzone onSourceDrop={onDrop} />}
+          {hasDropzone && (
+            <AssetDropzone onSourceDrop={onDrop} maxFileSize={maxFileSize} />
+          )}
           {filteredAssets.map((asset) => (
             <AssetCardDraggable
               asset={asset}

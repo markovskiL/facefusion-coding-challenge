@@ -53,7 +53,7 @@ export const AssetLibrary = () => {
     })
   );
 
-  const [error, setError] = useState<string | null>(null);
+  // const [error, setError] = useState<string | null>(null);
 
   const [assetsMap, setAssetsMap] = useState<{
     source: Asset[];
@@ -64,7 +64,6 @@ export const AssetLibrary = () => {
   });
 
   const handleDrop = (section: Section) => async (acceptedFiles: File[]) => {
-    setError(null);
     for (const file of acceptedFiles) {
       try {
         const newAsset = await readAsset({
@@ -144,6 +143,7 @@ export const AssetLibrary = () => {
           onDrop={handleDrop("source")}
           getFilteredAssets={getFilteredAssets}
           filters={filters}
+          maxFileSize={MAX_FILE_SIZE}
         />
 
         <AssetSection<FilterType>
@@ -155,6 +155,7 @@ export const AssetLibrary = () => {
           onDrop={handleDrop("target")}
           getFilteredAssets={getFilteredAssets}
           filters={filters}
+          maxFileSize={MAX_FILE_SIZE}
         />
       </div>
     </DndContext>

@@ -1,26 +1,36 @@
 import AddCircle from "@material-symbols/svg-400/outlined/add_circle.svg?react";
 import { useDropzone } from "react-dropzone";
 import { cn } from "../lib/utils";
-
-const MAX_FILE_SIZE = 3 * 1024 * 1024;
+import { toast } from "sonner";
 
 interface Props {
   onSourceDrop: (acceptedFiles: File[]) => void;
-  maxSize?: number;
+  maxFileSize: number;
 }
-export const AssetDropzone = ({
-  onSourceDrop,
-  maxSize = MAX_FILE_SIZE,
-}: Props) => {
+export const AssetDropzone = ({ onSourceDrop, maxFileSize }: Props) => {
   const { getRootProps, getInputProps, isDragActive, isDragReject } =
     useDropzone({
-      onDrop: onSourceDrop,
+      onDrop: (acceptedFiles) => {
+        onSourceDrop(acceptedFiles);
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+      onDropRejected: (fileRejections) => {
+        if (fileRejections.length > 0) {
+          fileRejections.forEach((rejection) => {
+            rejection.errors.forEach((error) => {
+              toast.error(error.message);
+            });
+          });
+        }
+      },
       accept: {
         "image/*": [],
         "audio/*": [],
         "video/*": [],
       },
-      maxSize,
+      maxSize: maxFileSize,
       noClick: false,
     });
 
