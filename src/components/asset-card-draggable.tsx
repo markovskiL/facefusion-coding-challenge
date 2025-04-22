@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { getAssetIcon } from "../lib/get-asset-icon";
-import { Asset } from "../types/asset";
-import { cn } from "../lib/utils";
+import { getAssetIcon } from "@/lib/get-asset-icon";
+import { Asset } from "@/types/asset";
+import { cn } from "@/lib/utils";
 import { useDraggable } from "@dnd-kit/core";
 import MoreIcon from "@material-symbols/svg-400/outlined/more_vert.svg?react";
 import DeleteIcon from "@material-symbols/svg-400/outlined/delete.svg?react";

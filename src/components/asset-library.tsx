@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   DndContext,
   DragEndEvent,
@@ -5,13 +6,15 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import ImageIcon from "@material-symbols/svg-400/outlined/image.svg?react";
-import { Button } from "./ui/button";
-import { useState } from "react";
-import { Asset } from "../types/asset";
-import { AssetSection } from "./asset-section";
-import { readAsset } from "../lib/read-asset";
+
+import { Button } from "@/components//ui/button";
+import { Asset } from "@/types/asset";
+import { AssetSection } from "@/components/asset-section";
+
+import { readAsset } from "@/lib/read-asset";
 import { toast } from "sonner";
+
+import ImageIcon from "@material-symbols/svg-400/outlined/image.svg?react";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 

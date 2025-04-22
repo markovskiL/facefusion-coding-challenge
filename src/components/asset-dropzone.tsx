@@ -1,6 +1,6 @@
 import AddCircle from "@material-symbols/svg-400/outlined/add_circle.svg?react";
 import { useDropzone } from "react-dropzone";
-import { cn } from "../lib/utils";
+import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
 interface Props {
