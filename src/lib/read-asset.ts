@@ -21,6 +21,8 @@ export const readAsset = ({
     const reader = new FileReader();
 
     reader.onload = () => {
+      const blob = new Blob([file], { type: file.type });
+      const url = URL.createObjectURL(blob);
       const timestamp = Date.now();
       const id = `${section}-${timestamp}-${Math.random()
         .toString(36)
@@ -30,12 +32,11 @@ export const readAsset = ({
         name: file.name,
         type: file.type.split("/")[0],
         format: file.name.split(".").pop() || "",
-        url: reader.result as string,
+        url,
         size: file.size,
         createdAt: new Date().toISOString(),
       });
     };
-
     reader.onerror = () => {
       const msg = `Failed to read file "${file.name}".`;
       reject(new Error(msg));
