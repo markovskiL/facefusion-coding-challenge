@@ -7,13 +7,13 @@ import {
 } from "@dnd-kit/core";
 import ImageIcon from "@material-symbols/svg-400/outlined/image.svg?react";
 import { Button } from "./ui/button";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { Asset } from "../types/asset";
 import { AssetSection } from "./asset-section";
 import { readAsset } from "../lib/read-asset";
 import { toast } from "sonner";
 
-const MAX_FILE_SIZE = 1 * 1024 * 1024;
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 type Section = "source" | "target";
 
@@ -63,46 +63,42 @@ export const AssetLibrary = () => {
     target: [],
   });
 
-  const handleDrop = useCallback(
-    (section: Section) => async (acceptedFiles: File[]) => {
-      setError(null);
-      for (const file of acceptedFiles) {
-        try {
-          const newAsset = await readAsset({
-            file,
-            section,
-            maxFileSize: MAX_FILE_SIZE,
-          });
-          setAssetsMap((prev) => ({
-            ...prev,
-            [section]: [...prev[section], newAsset],
-          }));
-        } catch (err: unknown) {
-          toast.error(
-            err instanceof Error ? err.message : "An unknown error occurred"
-          );
-        }
+  const handleDrop = (section: Section) => async (acceptedFiles: File[]) => {
+    setError(null);
+    for (const file of acceptedFiles) {
+      try {
+        const newAsset = await readAsset({
+          file,
+          section,
+          maxFileSize: MAX_FILE_SIZE,
+        });
+        setAssetsMap((prev) => ({
+          ...prev,
+          [section]: [...prev[section], newAsset],
+        }));
+      } catch (err: unknown) {
+        toast.error(
+          err instanceof Error ? err.message : "An unknown error occurred"
+        );
       }
-    },
-    []
-  );
+    }
+  };
 
-  const handleDelete = useCallback(
-    (section: Section) => (id: string) => {
-      setAssetsMap((prev) => ({
-        ...prev,
-        [section]: prev[section].filter((asset) => asset.id !== id),
-      }));
-    },
-    []
-  );
+  const handleDelete = (section: Section) => (id: string) => {
+    setAssetsMap((prev) => ({
+      ...prev,
+      [section]: prev[section].filter((asset) => asset.id !== id),
+    }));
+  };
 
-  const handleDragEnd = useCallback((event: DragEndEvent) => {
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
+
     if (!over) return;
 
     const activeId = active.id as string;
     const overSection = over.id as Section;
+
     setAssetsMap((prev) => {
       const { source, target } = prev;
       const inSource = source.find((item) => item.id === activeId);
@@ -122,7 +118,7 @@ export const AssetLibrary = () => {
       }
       return prev;
     });
-  }, []);
+  };
 
   return (
     <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
