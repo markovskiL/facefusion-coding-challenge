@@ -129,7 +129,7 @@ export const AssetLibrary = () => {
           </div>
 
           <div className="flex gap-2">
-            <Button variant="tertiary">Cancel</Button>
+            <Button variant="ghost">Cancel</Button>
             <Button>Save</Button>
           </div>
         </div>
