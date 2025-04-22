@@ -139,7 +139,10 @@ export const AssetCardDraggable = ({ asset, id, onDelete }: Props) => {
       </div>
 
       <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
-        <DialogContent className="bg-gray-900 border-gray-700 p-4 max-w-lg w-full text-white">
+        <DialogContent
+          aria-describedby={undefined}
+          className="bg-gray-900 border-gray-700 p-4 max-w-lg w-full text-white"
+        >
           <DialogHeader>
             <DialogTitle>{asset.name}</DialogTitle>
           </DialogHeader>

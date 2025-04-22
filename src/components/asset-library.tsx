@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   DndContext,
   DragEndEvent,
@@ -15,6 +14,7 @@ import { readAsset } from "@/lib/read-asset";
 import { toast } from "sonner";
 
 import ImageIcon from "@material-symbols/svg-400/outlined/image.svg?react";
+import { useAssetContext } from "@/context/assets-context";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
@@ -49,25 +49,12 @@ const getFilteredAssets = (
 
 export const AssetLibrary = () => {
   const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 5,
-      },
-    })
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
   );
+  const { assetsMap, setAssetsMap } = useAssetContext();
 
-  // const [error, setError] = useState<string | null>(null);
-
-  const [assetsMap, setAssetsMap] = useState<{
-    source: Asset[];
-    target: Asset[];
-  }>({
-    source: [],
-    target: [],
-  });
-
-  const handleDrop = (section: Section) => async (acceptedFiles: File[]) => {
-    for (const file of acceptedFiles) {
+  const handleDrop = (section: Section) => async (files: File[]) => {
+    for (const file of files) {
       try {
         const newAsset = await readAsset({
           file,
