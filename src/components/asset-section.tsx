@@ -1,32 +1,46 @@
+import { useState, useEffect } from "react";
 import { AssetDroppable } from "./asset-droppable";
 import { AssetDropzone } from "./asset-dropzone";
-import { useState } from "react";
 import { AssetCardDraggable } from "./asset-card-draggable";
 import { Asset } from "../types/asset";
 
-interface Props {
+interface FilterOption<FilterValue extends string> {
+  value: FilterValue;
+  label: string;
+}
+
+interface Props<FilterValue extends string> {
   sectionId: string;
   title: string;
   assets: Asset[];
   onDelete: (id: string) => void;
   hasDropzone: boolean;
   onDrop: (files: File[]) => void;
+  filters: FilterOption<FilterValue>[];
+  getFilteredAssets: (filterType: FilterValue, assets: Asset[]) => Asset[];
 }
 
-export const AssetSection = ({
+export const AssetSection = <FilterValue extends string>({
   sectionId,
   title,
   assets,
   onDelete,
   hasDropzone,
   onDrop,
-}: Props) => {
-  const [filterType, setFilterType] = useState<string>("all");
+  filters,
+  getFilteredAssets,
+}: Props<FilterValue>) => {
+  const [filterType, setFilterType] = useState<FilterValue>(
+    filters[0]?.value || ("" as FilterValue)
+  );
 
-  const filteredAssets =
-    filterType === "all"
-      ? assets
-      : assets.filter((asset) => asset.type === filterType);
+  useEffect(() => {
+    if (filters.length > 0 && !filters.some((f) => f.value === filterType)) {
+      setFilterType(filters[0].value);
+    }
+  }, [filters, filterType]);
+
+  const filteredAssets = getFilteredAssets(filterType, assets);
 
   return (
     <div className="p-4 bg-gray-900 rounded-3xl">
@@ -35,14 +49,15 @@ export const AssetSection = ({
           <h2 className="text-2xl mb-4">{title}</h2>
           <select
             name="filter"
-            id=""
             value={filterType}
-            onChange={(e) => setFilterType(e.target.value)}
-            className="bg-gray-800 text-white border-none rounded p-1"
+            onChange={(e) => setFilterType(e.target.value as FilterValue)}
+            className="text-white border-none rounded p-1"
           >
-            <option value="all">All</option>
-            <option value="image">Images</option>
-            <option value="video">Videos</option>
+            {filters.map((filter) => (
+              <option key={filter.value} value={filter.value}>
+                {filter.label}
+              </option>
+            ))}
           </select>
         </div>
         <div className="flex flex-wrap gap-4">

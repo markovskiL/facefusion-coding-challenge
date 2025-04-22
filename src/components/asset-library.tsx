@@ -14,7 +14,35 @@ import { readAsset } from "../lib/read-asset";
 import { toast } from "sonner";
 
 const MAX_FILE_SIZE = 1 * 1024 * 1024;
+
 type Section = "source" | "target";
+
+type FilterType = "all" | "image" | "video" | "audio";
+
+const filters: { value: FilterType; label: string }[] = [
+  { value: "all", label: "All" },
+  { value: "image", label: "Images" },
+  { value: "video", label: "Videos" },
+  { value: "audio", label: "Audios" },
+];
+
+const getFilteredAssets = (
+  filterType: FilterType,
+  assets: Asset[]
+): Asset[] => {
+  switch (filterType) {
+    case "all":
+      return assets;
+    case "image":
+      return assets.filter((a) => a.type === "image");
+    case "video":
+      return assets.filter((a) => a.type === "video");
+    case "audio":
+      return assets.filter((a) => a.type === "audio");
+    default:
+      return assets;
+  }
+};
 
 export const AssetLibrary = () => {
   const sensors = useSensors(
@@ -111,22 +139,26 @@ export const AssetLibrary = () => {
           </div>
         </div>
 
-        <AssetSection
+        <AssetSection<FilterType>
           sectionId="source"
           title="Source"
           assets={assetsMap.source}
           onDelete={handleDelete("source")}
           hasDropzone
           onDrop={handleDrop("source")}
+          getFilteredAssets={getFilteredAssets}
+          filters={filters}
         />
 
-        <AssetSection
+        <AssetSection<FilterType>
           sectionId="target"
           title="Target"
           assets={assetsMap.target}
           onDelete={handleDelete("target")}
           hasDropzone
           onDrop={handleDrop("target")}
+          getFilteredAssets={getFilteredAssets}
+          filters={filters}
         />
       </div>
     </DndContext>
