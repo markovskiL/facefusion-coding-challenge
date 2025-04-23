@@ -8,7 +8,10 @@ function App() {
       <div className="h-screen w-screen bg-gray-800 flex items-center justify-center">
         <AssetLibrary />
       </div>
-      <Toaster richColors />
+      <Toaster richColors closeButton />
+      <div className="absolute bottom-5 right-5 text-md italic font-mono">
+        <p>Made by: Leonardo Markovski</p>
+      </div>
     </AssetProvider>
   );
 }

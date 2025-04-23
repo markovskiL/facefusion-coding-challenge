@@ -49,7 +49,7 @@ const getFilteredAssets = (
 
 export const AssetLibrary = () => {
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
+    useSensor(PointerSensor, { activationConstraint: { distance: 3 } })
   );
   const { assetsMap, setAssetsMap } = useAssetContext();
 

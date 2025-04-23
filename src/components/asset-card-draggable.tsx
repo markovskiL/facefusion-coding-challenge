@@ -80,7 +80,7 @@ export const AssetCardDraggable = ({ asset, id, onDelete }: Props) => {
           "relative group",
           "bg-gray-950 p-1.5 rounded-xl border-2 h-30 w-22",
           selected ? "border-blue-500" : "border-transparent",
-          isDragging ? "cursor-move" : "cursor-pointer",
+          isDragging ? "cursor-grabbing" : "cursor-pointer",
           isDeleting
             ? "opacity-0 scale-95 pointer-events-none transition-all duration-300 ease-in-out"
             : "opacity-100 scale-100"
@@ -97,7 +97,7 @@ export const AssetCardDraggable = ({ asset, id, onDelete }: Props) => {
               variant="secondary"
               size="icon"
               className={cn(
-                "border border-gray-300 absolute z-10 top-1 right-1 p-1 rounded-full opacity-0 group-hover:opacity-100",
+                "border border-gray-300  absolute z-10 top-1 right-1 p-1 rounded-full opacity-0 group-hover:opacity-100",
                 isDragging && "hidden",
                 isDropdownOpen && "opacity-100"
               )}
