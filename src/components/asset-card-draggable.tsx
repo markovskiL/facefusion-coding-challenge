@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getAssetIcon } from "@/lib/get-asset-icon";
 import { Asset } from "@/types/asset";
 import { cn } from "@/lib/utils";
@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/dialog";
 
 import { Button } from "@/components/ui/button";
+import { base64ToBlob } from "@/lib/base64-to-blob";
 
 interface Props {
   asset: Asset;
@@ -37,6 +38,8 @@ export const AssetCardDraggable = ({ asset, id, onDelete }: Props) => {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+
+  const [blobUrl, setBlobUrl] = useState<string | null>(null);
 
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
@@ -56,6 +59,19 @@ export const AssetCardDraggable = ({ asset, id, onDelete }: Props) => {
     }, 300);
     return () => clearTimeout(timer);
   };
+
+  useEffect(() => {
+    if (asset.type === "video" || asset.type === "audio") {
+      const blob = base64ToBlob(asset.url);
+      const url = URL.createObjectURL(blob);
+      setBlobUrl(url);
+
+      return () => {
+        URL.revokeObjectURL(url);
+        setBlobUrl(null);
+      };
+    }
+  }, [asset.url, asset.type]);
 
   return (
     <>
@@ -120,7 +136,7 @@ export const AssetCardDraggable = ({ asset, id, onDelete }: Props) => {
         )}
         {asset.type === "video" && (
           <div className="relative w-full h-20 bg-black rounded-lg overflow-hidden">
-            <video src={asset.url} className="w-full h-full object-cover" />
+            <video src={blobUrl || ""} className="w-full h-full object-cover" />
             <div className="absolute bottom-1 left-1 bg-gray-800 text-white text-xs px-1 rounded">
               Video
             </div>
@@ -128,7 +144,7 @@ export const AssetCardDraggable = ({ asset, id, onDelete }: Props) => {
         )}
         {asset.type === "audio" && (
           <div className="w-full h-20 bg-gray-800 rounded-lg flex flex-col items-center justify-center">
-            <audio src={asset.url} className="w-full px-2" />
+            <audio src={blobUrl || ""} className="w-full px-2" />
             <div className="text-white text-xs mt-1">Audio</div>
           </div>
         )}
@@ -156,7 +172,7 @@ export const AssetCardDraggable = ({ asset, id, onDelete }: Props) => {
             )}
             {asset.type === "video" && (
               <video
-                src={asset.url}
+                src={blobUrl || ""}
                 controls
                 className="w-full max-h-[70vh] rounded"
                 autoPlay
@@ -164,7 +180,7 @@ export const AssetCardDraggable = ({ asset, id, onDelete }: Props) => {
             )}
             {asset.type === "audio" && (
               <div className="flex flex-col items-center gap-4">
-                <audio src={asset.url} controls className="w-full" />
+                <audio src={blobUrl || ""} controls className="w-full" />
                 <p className="text-white text-sm">{asset.name}</p>
               </div>
             )}
