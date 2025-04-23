@@ -148,7 +148,7 @@ export const AssetCardDraggable = ({ asset, id, onDelete }: Props) => {
             <div className="text-white text-xs mt-1">Audio</div>
           </div>
         )}
-        <div className="text-gray-400 flex items-center gap-2 mt-1 text-xs">
+        <div className="text-gray-400 flex items-center gap-2 mt-2 text-xs">
           {getAssetIcon(asset.type, "fill-gray-400 w-4 h-4")}
           <span className="truncate">{asset.format.toUpperCase()}</span>
         </div>

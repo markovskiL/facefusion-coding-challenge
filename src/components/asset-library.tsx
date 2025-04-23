@@ -15,6 +15,7 @@ import { toast } from "sonner";
 
 import ImageIcon from "@material-symbols/svg-400/outlined/image.svg?react";
 import { useAssetContext } from "@/context/assets-context";
+import { ConfettiButton } from "./magicui/confetti";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
@@ -49,7 +50,7 @@ const getFilteredAssets = (
 
 export const AssetLibrary = () => {
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 3 } })
+    useSensor(PointerSensor, { activationConstraint: { distance: 1 } })
   );
   const { assetsMap, setAssetsMap } = useAssetContext();
 
@@ -120,7 +121,7 @@ export const AssetLibrary = () => {
 
           <div className="flex gap-2">
             <Button variant="ghost">Cancel</Button>
-            <Button>Save</Button>
+            <ConfettiButton>Save</ConfettiButton>
           </div>
         </div>
 
